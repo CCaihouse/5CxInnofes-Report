@@ -334,7 +334,17 @@ async function saveDataToCloud(){
 
         alert("准备保存：" + Object.keys(pageData).length + "个字段");
         
-        await setDoc(pageRef,pageData);
+        try {
+
+    await setDoc(pageRef,pageData);
+
+    alert("Firebase保存成功");
+
+} catch(error) {
+
+    alert("Firebase错误：" + error.message);
+
+}
 
 
         if(saveStatus){
