@@ -364,7 +364,11 @@ async function saveDataToCloud(){
     try{
 
 
+        alert("开始写入Firebase");
+
         await setDoc(pageRef,pageData);
+
+        alert("Firebase写入完成");
 
 
 
