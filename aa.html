@@ -247,6 +247,7 @@ h1 { font-size:52px; font-weight:700; margin-bottom:12px; }
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 import { 
     getFirestore, 
     doc, 
@@ -257,43 +258,63 @@ import {
 
 // Firebase 配置
 const firebaseConfig = {
+
     apiKey: "AIzaSyAxlt8ES5z6Sjou7Ylznt7Ua-9x5QqwJgs",
+
     authDomain: "c-innofes.firebaseapp.com",
+
     projectId: "c-innofes",
+
     storageBucket: "c-innofes.firebasestorage.app",
+
     messagingSenderId: "82029006121",
+
     appId: "1:82029006121:web:a0c0b97faaa62a37123b38"
+
 };
 
 
 // 初始化 Firebase
+
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 
 
-// 保存状态
+// Firestore 保存位置
+
+const pageRef = doc(db, "5CReport", "mainPage");
+
+
+// 保存提示
+
 const saveStatus = document.getElementById('save-status');
+
+
+// 自动保存计时器
 
 let saveTimeout;
 
 
 // 获取所有可编辑区域
+
 const editableElements = document.querySelectorAll('[contenteditable="true"]');
 
 
-// Firestore 存储位置
-const pageRef = doc(db, "5CReport", "mainPage");
+// 监听修改
 
-
-// 自动保存监听
 editableElements.forEach(el => {
 
+
     el.addEventListener('input', () => {
+
 
         if(saveStatus){
 
             saveStatus.innerText = "正在云端保存...";
+
             saveStatus.style.background = "#F28C28";
+
             saveStatus.style.opacity = "1";
 
         }
@@ -304,22 +325,30 @@ editableElements.forEach(el => {
 
         saveTimeout = setTimeout(() => {
 
+
             saveDataToCloud();
+
 
         },1500);
 
+
     });
+
 
 });
 
 
-// 保存到 Firebase
+
+// 保存数据到 Firestore
+
 async function saveDataToCloud(){
+
 
     const pageData = {};
 
 
-    document.querySelectorAll('[contenteditable="true"]').forEach(el=>{
+    document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+
 
         if(el.id){
 
@@ -327,30 +356,23 @@ async function saveDataToCloud(){
 
         }
 
+
     });
+
 
 
     try{
 
-       alert("测试版本2：准备保存：" + Object.keys(pageData).length + "个字段");
-        
-        alert("测试版本2：准备保存：" + Object.keys(pageData).length + "个字段");
 
-    await setDoc(pageRef,pageData);
+        await setDoc(pageRef,pageData);
 
-    alert("Firebase保存成功");
-
-} catch(error) {
-
-    alert("Firebase错误：" + error.message);
-
-}
 
 
         if(saveStatus){
 
             saveStatus.innerText = "云端已保存 ✓";
-            saveStatus.style.background="#3BAA5C";
+
+            saveStatus.style.background = "#3BAA5C";
 
 
             setTimeout(()=>{
@@ -364,25 +386,31 @@ async function saveDataToCloud(){
 
     }catch(error){
 
-        console.error("Firebase 保存失败:",error);
+
+        console.error("Firebase保存失败:",error);
 
 
         if(saveStatus){
 
-            saveStatus.innerText="保存失败 ✕";
-            saveStatus.style.background="#E2231A";
+            saveStatus.innerText = "保存失败 ✕";
+
+            saveStatus.style.background = "#E2231A";
+
+            saveStatus.style.opacity="1";
 
         }
 
+
     }
+
 
 }
 
 
 
-// 打开网页时读取最新内容
+// 打开网页时读取数据
 
-window.addEventListener("DOMContentLoaded",async()=>{
+window.addEventListener("DOMContentLoaded", async()=>{
 
 
     try{
@@ -402,24 +430,30 @@ window.addEventListener("DOMContentLoaded",async()=>{
             for(const id in savedData){
 
 
-                const el=document.getElementById(id);
+                const el = document.getElementById(id);
 
 
 
                 if(el){
 
-                    el.innerHTML=savedData[id];
+
+                    el.innerHTML = savedData[id];
+
 
                 }
 
+
             }
+
 
         }
 
 
     }catch(error){
 
+
         console.log("Firebase读取失败:",error);
+
 
     }
 
