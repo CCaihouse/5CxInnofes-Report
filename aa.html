@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5C × InnoFes Campaign</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ==================== 基础样式 ==================== */
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:"Inter",sans-serif; background:#f5f6f8; color:#222; overflow-x:hidden; }
+section { width:100%; min-height:100vh; padding:70px 100px 90px; background:white; display:flex; flex-direction:column; }
+h1 { font-size:52px; font-weight:700; margin-bottom:12px; }
+.subtitle { font-size:20px; color:#777; margin-bottom:40px; }
+.red { color:#E2231A; }
+.footer { margin-top:auto; font-size:13px; color:#999; }
+
+/* ==================== Overview 样式 ==================== */
+.fiveC { display:flex; gap:18px; margin-bottom:45px; }
+.cTag { flex:1; padding:18px 10px; border-radius:18px; background:#fafafa; border:1px solid #ececec; text-align:center; font-weight:600; font-size:18px; box-shadow:0 8px 20px rgba(0,0,0,.04); }
+.communication { color:#E2231A; }
+.collaboration { color:#F28C28; }
+.creativity { color:#3478D4; }
+.curiosity { color:#3BAA5C; }
+.compassion { color:#8E5CC7; }
+.cardRow { display:flex; gap:30px; }
+.card { flex:1; padding:35px; background:rgba(255,255,255,.8); border-radius:22px; border:1px solid #ececec; box-shadow:0 15px 40px rgba(0,0,0,.05); backdrop-filter:blur(20px); }
+.card h3 { color:#E2231A; margin-bottom:18px; font-size:22px; }
+.flow { margin-top:55px; display:flex; justify-content:center; align-items:center; gap:25px; }
+.node { padding:18px 22px; border-radius:20px; background:#fafafa; border:1px solid #e9e9e9; font-weight:600; text-align:center; line-height:1.5; }
+.node span { font-size:13px; font-weight:400; color:#666; }
+.arrow { font-size:30px; color:#E2231A; }
+.metricRow { margin-top:50px; display:flex; gap:25px; }
+.metric { flex:1; background:#111; color:white; border-radius:22px; padding:35px; text-align:center; }
+.metricNumber { font-size:54px; font-weight:700; color:#ff5a52; margin-bottom:10px; }
+
+/* ==================== Roadmap 强制并排样式 ==================== */
+.timeline-cards { display: flex; gap: 15px; margin-top: 20px; width: 100%; }
+.month-card { flex: 1; background: #fafafa; border-radius: 20px; padding: 22px 18px; border: 1px solid #ececec; box-shadow: 0 8px 25px rgba(0,0,0,.03); display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.month-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,.08); }
+.month-title { font-size: 24px; font-weight: 700; color: #E2231A; margin-bottom: 5px; }
+.month-phase { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px dashed #ddd; min-height: 45px; }
+.month-tasks { list-style: none; padding: 0; margin: 0; }
+.month-tasks li { font-size: 12.5px; color: #666; margin-bottom: 10px; line-height: 1.4; position: relative; padding-left: 12px; }
+.month-tasks li::before { content: "•"; color: #E2231A; position: absolute; left: 0; font-size: 14px; top: -1px; }
+
+/* ==================== Progress & Next Step 样式 ==================== */
+.kanban { display:flex; gap:28px; margin-top:20px; }
+.kanbanCol { flex:1; background:#fafafa; border-radius:22px; padding:28px; border:1px solid #ececec; box-shadow:0 15px 40px rgba(0,0,0,.05); }
+.kanbanCol h2 { font-size:22px; margin-bottom:25px; color:#E2231A; }
+.item { display:flex; align-items:flex-start; gap:12px; margin-bottom:18px; line-height:1.6; }
+.icon { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
+.done { background:#E8F7EE; color:#2E8B57; }
+.progress { background:#FFF4E5; color:#F39C12; }
+.next { background:#F3F4F6; color:#666; }
+.noteBox { margin-top:60px; display:flex; gap:28px; }
+.note { flex:1; background:#fafafa; padding:26px; border-radius:18px; border-left:6px solid #E2231A; }
+.note h3 { margin-bottom:15px; color:#E2231A; }
+.note ul { padding-left:20px; line-height:1.8; color:#555; }
+
+/* ==================== 在线编辑的交互样式 ==================== */
+[contenteditable="true"] { outline: none; transition: background 0.2s, box-shadow 0.2s; border-radius: 4px; }
+[contenteditable="true"]:hover { background: rgba(226, 35, 26, 0.05); box-shadow: 0 0 0 4px rgba(226, 35, 26, 0.05); }
+[contenteditable="true"]:focus { background: rgba(226, 35, 26, 0.05); border-left: 3px solid #E2231A; padding-left: 6px; box-shadow: none; }
+</style>
+</head>
+
+<body>
+
+<!-- 自动保存的提示浮窗 -->
+<div id="save-status" style="position: fixed; top: 20px; right: 20px; padding: 10px 20px; background: #3BAA5C; color: white; border-radius: 8px; font-size: 14px; opacity: 0; transition: opacity 0.3s; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    已自动保存 ✓
+</div>
+
+<!-- ============================ 1. Overview ============================ -->
+<section id="overview">
+    <h1 id="ov-title" contenteditable="true">5C <span class="red">×</span> InnoFes Campaign</h1>
+    <div class="subtitle" id="ov-subtitle" contenteditable="true">Turning innovation stories into everyday ways of working.</div>
+
+    <div class="fiveC">
+        <div class="cTag communication" id="c1" contenteditable="true">Communication</div>
+        <div class="cTag collaboration" id="c2" contenteditable="true">Collaboration</div>
+        <div class="cTag creativity" id="c3" contenteditable="true">Creativity</div>
+        <div class="cTag curiosity" id="c4" contenteditable="true">Curiosity</div>
+        <div class="cTag compassion" id="c5" contenteditable="true">Compassion</div>
+    </div>
+
+    <div class="cardRow">
+        <div class="card">
+            <h3 id="ov-card1-title" contenteditable="true">5C Overall Strategy</h3>
+            <p id="ov-card1-desc" contenteditable="true">Build a long-term 5C ecosystem by embedding five human-centered behaviors into communication, innovation activities and daily work practices.<br><br>Future activations will continue through platforms such as 5C × InnoFes and 5C × AI APEX.</p>
+        </div>
+        <div class="card">
+            <h3 id="ov-card2-title" contenteditable="true">Campaign Strategy</h3>
+            <p id="ov-card2-desc" contenteditable="true">Use Innovation Festival as the first activation platform to showcase how 5C behaviors enable innovation through authentic employee stories and experiences.</p>
+        </div>
+    </div>
+
+    <div class="flow">
+        <div class="node"><div id="fl1-title" contenteditable="true">Campaign Launch</div><span id="fl1-desc" contenteditable="true">Kickoff communication</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><div id="fl2-title" contenteditable="true">Story Sharing</div><span id="fl2-desc" contenteditable="true">Local finalists publish stories</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><div id="fl3-title" contenteditable="true">Storytelling</div><span id="fl3-desc" contenteditable="true">Interview Global Finalists</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><div id="fl4-title" contenteditable="true">Knowledge Assets</div><span id="fl4-desc" contenteditable="true">Playbook & Archive</span></div>
+    </div>
+
+    <div class="metricRow">
+        <div class="metric"><div class="metricNumber" id="mt1-num" contenteditable="true">30–45</div><span id="mt1-desc" contenteditable="true">Story Posts</span></div>
+        <div class="metric"><div class="metricNumber" id="mt2-num" contenteditable="true">3</div><span id="mt2-desc" contenteditable="true">Months Storytelling</span></div>
+        <div class="metric"><div class="metricNumber" id="mt3-num" contenteditable="true">1</div><span id="mt3-desc" contenteditable="true">5C Playbook</span></div>
+    </div>
+    <div class="footer" id="ov-footer" contenteditable="true">5C × InnoFes Executive Overview</div>
+</section>
+
+
+<!-- ============================ 2. Roadmap ============================ -->
+<section id="roadmap">
+    <h1 id="rm-title" contenteditable="true">Campaign Roadmap</h1>
+    <div class="subtitle" id="rm-subtitle" contenteditable="true">Key milestones from planning to knowledge assets.</div>
+
+    <div class="timeline-cards">
+        <div class="month-card">
+            <div class="month-title" id="rm-m1-t" contenteditable="true">Jun</div>
+            <div class="month-phase" id="rm-m1-p" contenteditable="true">Foundation</div>
+            <ul class="month-tasks" id="rm-m1-l" contenteditable="true">
+                <li>Project Planning</li><li>Master Tracker</li><li>Communication Alignment</li><li>Content Preparation</li>
+            </ul>
+        </div>
+        <div class="month-card">
+            <div class="month-title" id="rm-m2-t" contenteditable="true">Jul</div>
+            <div class="month-phase" id="rm-m2-p" contenteditable="true">Campaign Launch</div>
+            <ul class="month-tasks" id="rm-m2-l" contenteditable="true">
+                <li>Kickoff Newsletter</li><li>Warm-up Video</li><li>Story Sharing</li><li>Finalist Enablement</li>
+            </ul>
+        </div>
+        <div class="month-card">
+            <div class="month-title" id="rm-m3-t" contenteditable="true">Aug</div>
+            <div class="month-phase" id="rm-m3-p" contenteditable="true">Storytelling Campaign</div>
+            <ul class="month-tasks" id="rm-m3-l" contenteditable="true">
+                <li>Global Finalist Interviews</li><li>5C Story Series</li><li>Leadership Engagement</li>
+            </ul>
+        </div>
+        <div class="month-card">
+            <div class="month-title" id="rm-m4-t" contenteditable="true">Sep</div>
+            <div class="month-phase" id="rm-m4-p" contenteditable="true">Storytelling Campaign</div>
+            <ul class="month-tasks" id="rm-m4-l" contenteditable="true">
+                <li>Continuous Story Publishing</li><li>Interview Series</li><li>Knowledge Archive</li>
+            </ul>
+        </div>
+        <div class="month-card">
+            <div class="month-title" id="rm-m5-t" contenteditable="true">Oct</div>
+            <div class="month-phase" id="rm-m5-p" contenteditable="true">Storytelling Campaign</div>
+            <ul class="month-tasks" id="rm-m5-l" contenteditable="true">
+                <li>Story Amplification</li><li>Cross-channel Communication</li>
+            </ul>
+        </div>
+        <div class="month-card">
+            <div class="month-title" id="rm-m6-t" contenteditable="true">Nov</div>
+            <div class="month-phase" id="rm-m6-p" contenteditable="true">Highlight</div>
+            <ul class="month-tasks" id="rm-m6-l" contenteditable="true">
+                <li>Campaign Highlight Video</li><li>5C × AI APEX Transition</li>
+            </ul>
+        </div>
+        <div class="month-card">
+            <div class="month-title" id="rm-m7-t" contenteditable="true">Dec</div>
+            <div class="month-phase" id="rm-m7-p" contenteditable="true">Knowledge Assets</div>
+            <ul class="month-tasks" id="rm-m7-l" contenteditable="true">
+                <li>5C Playbook</li><li>Knowledge Center</li><li>Next Phase Proposal</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer" id="rm-footer" contenteditable="true">Roadmap Overview</div>
+</section>
+
+
+<!-- ============================ 3. Progress ============================ -->
+<section id="progress">
+    <h1 id="pg-title" contenteditable="true">Current Progress</h1>
+    <div class="subtitle" id="pg-subtitle" contenteditable="true">Where we are today</div>
+
+    <div class="kanban">
+        <!-- Col 1 -->
+        <div class="kanbanCol">
+            <h2 id="kb1-title" contenteditable="true">Completed</h2>
+            <div class="item"><div class="icon done">✓</div><div id="kb1-1" contenteditable="true">Project framework & overall roadmap</div></div>
+            <div class="item"><div class="icon done">✓</div><div id="kb1-2" contenteditable="true">Master Tracker established</div></div>
+            <div class="item"><div class="icon done">✓</div><div id="kb1-3" contenteditable="true">Communication integration guideline</div></div>
+            <div class="item"><div class="icon done">✓</div><div id="kb1-4" contenteditable="true">5C Tagging Standard</div></div>
+            <div class="item"><div class="icon done">✓</div><div id="kb1-5" contenteditable="true">Campaign structure & incentive proposal</div></div>
+        </div>
+        <!-- Col 2 -->
+        <div class="kanbanCol">
+            <h2 id="kb2-title" contenteditable="true">In Progress</h2>
+            <div class="item"><div class="icon progress">●</div><div id="kb2-1" contenteditable="true">What's 5C animation production</div></div>
+            <div class="item"><div class="icon progress">●</div><div id="kb2-2" contenteditable="true">Story Template</div></div>
+            <div class="item"><div class="icon progress">●</div><div id="kb2-3" contenteditable="true">AI Story Assistant Prompt</div></div>
+            <div class="item"><div class="icon progress">●</div><div id="kb2-4" contenteditable="true">Kickoff communication assets</div></div>
+            <div class="item"><div class="icon progress">●</div><div id="kb2-5" contenteditable="true">PMO alignment</div></div>
+        </div>
+        <!-- Col 3 -->
+        <div class="kanbanCol">
+            <h2 id="kb3-title" contenteditable="true">Coming Next</h2>
+            <div class="item"><div class="icon next">→</div><div id="kb3-1" contenteditable="true">Kickoff Newsletter</div></div>
+            <div class="item"><div class="icon next">→</div><div id="kb3-2" contenteditable="true">Warm-up Video</div></div>
+            <div class="item"><div class="icon next">→</div><div id="kb3-3" contenteditable="true">Official Story Sharing Launch</div></div>
+            <div class="item"><div class="icon next">→</div><div id="kb3-4" contenteditable="true">Story Package Distribution</div></div>
+            <div class="item"><div class="icon next">→</div><div id="kb3-5" contenteditable="true">Finalist Enablement Session</div></div>
+        </div>
+    </div>
+    <div class="footer" id="pg-footer" contenteditable="true">Project Status</div>
+</section>
+
+
+<!-- ============================ 4. Next Step ============================ -->
+<section id="nextstep">
+    <h1 id="ns-title" contenteditable="true">July Action Plan & Support Needed</h1>
+    <div class="subtitle" id="ns-subtitle" contenteditable="true">Key priorities before campaign launch</div>
+
+    <div class="noteBox">
+        <div class="note">
+            <h3 id="ns-b1-title" contenteditable="true">July Focus</h3>
+            <ul id="ns-b1-list" contenteditable="true">
+                <li>Finalize 5C campaign communication assets</li>
+                <li>Launch kickoff newsletter and warm-up content</li>
+                <li>Drive Story Sharing participation</li>
+                <li>Prepare finalist enablement materials</li>
+            </ul>
+        </div>
+        <div class="note">
+            <h3 id="ns-b2-title" contenteditable="true">Support Needed</h3>
+            <ul id="ns-b2-list" contenteditable="true">
+                <li>Identify representative employee stories</li>
+                <li>Support finalist interviews and story collection</li>
+                <li>Align communication channels and publishing rhythm</li>
+                <li>Enable cross-team participation</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer" id="ns-footer" contenteditable="true">5C × InnoFes Executive Overview · Draft v3</div>
+</section>
+
+<!-- ============================ 自动保存的 JS 逻辑 ============================ -->
+<script>
+    // ⚠️ 替换成你刚才在 JSONBin 获取的真实链接和 Key
+    const BIN_URL = "https://api.jsonbin.io/v3/b/6a4cb0cff5f4af5e296afae0"; 
+    const API_KEY = "$2a$10$lf0Cu7iWUUPm6zSS3XkWJ.36nATJ.oXgeQpAAzV8KXzv/yluM9Hc6";
+
+    const saveStatus = document.getElementById('save-status');
+    let saveTimeout;
+    const editableElements = document.querySelectorAll('[contenteditable="true"]');
+
+    // 1. 监听打字
+    editableElements.forEach(el => {
+        el.addEventListener('input', () => {
+            saveStatus.innerText = '正在云端保存...';
+            saveStatus.style.background = '#F28C28';
+            saveStatus.style.opacity = '1';
+
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                saveDataToCloud();
+            }, 1500); 
+        });
+    });
+
+    // 2. 发送数据到 JSONBin 云端
+    async function saveDataToCloud() {
+        const pageData = {};
+        document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+            pageData[el.id] = el.innerHTML;
+        });
+
+        try {
+            const response = await fetch(BIN_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': API_KEY
+                },
+                body: JSON.stringify(pageData)
+            });
+
+            if (response.ok) {
+                saveStatus.innerText = '云端已保存 ✓';
+                saveStatus.style.background = '#3BAA5C';
+                setTimeout(() => { saveStatus.style.opacity = '0'; }, 2000);
+            }
+        } catch (error) {
+            saveStatus.innerText = '保存失败 ✕';
+            saveStatus.style.background = '#E2231A';
+        }
+    }
+
+    // 3. 一打开网页，就从云端读取最新数据
+    window.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const response = await fetch(BIN_URL + "/latest", {
+                headers: {
+                    'X-Master-Key': API_KEY
+                }
+            });
+            if (response.ok) {
+                const result = await response.json();
+                const savedData = result.record; // JSONBin 的数据存在 record 字段里
+                
+                // 确保有数据再覆盖
+                if (Object.keys(savedData).length > 0) {
+                    for (const id in savedData) {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.innerHTML = savedData[id];
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.log('读取云端数据失败', error);
+        }
+    });
+</script>
+</body>
+</html>
