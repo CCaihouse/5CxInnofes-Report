@@ -332,6 +332,8 @@ async function saveDataToCloud(){
 
     try{
 
+        alert("准备保存：" + Object.keys(pageData).length + "个字段");
+        
         await setDoc(pageRef,pageData);
 
 
